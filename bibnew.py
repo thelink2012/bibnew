@@ -146,7 +146,7 @@ async def main():
         for book in books:
             if book.return_date == today:
                 renew_books.append(book)
-            elif book.return_date > today:
+            elif book.return_date < today:
                 due_books.append(book)
 
         renewed_books = []
