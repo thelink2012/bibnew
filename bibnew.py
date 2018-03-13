@@ -69,6 +69,8 @@ def extract_books(html):
     for li in selector.xpath('/html/body/div[1]/div[2]/ul/li'):
         if li.xpath('./@data-role').extract_first() == 'list-divider':
             continue
+        if li.xpath('count(./*)').extract_first() == '0.0':
+            continue
         a = li.xpath('.//a')
 
         ahref = a.xpath('./@href').extract_first()
@@ -116,7 +118,7 @@ async def email_send(subject, text):
     email also specified in environment variables.
     
     If the environment variables are missing, no email is sent."""
-    if BIB_EMAIL_FROM_ADDR is None:
+    if BIB_EMAIL_TO_ADDR is None:
         return
     smtp = aiosmtplib.SMTP(hostname='smtp.gmail.com', port=587)
     await smtp.connect()
