@@ -28,6 +28,7 @@ import datetime
 import logging
 from collections import namedtuple
 from email.mime.text import MIMEText
+from pathlib import Path
 
 import aiohttp
 import aiosmtplib
@@ -105,6 +106,10 @@ async def pergamum_login(session):
     }
     return await session.post(login_url, headers=headers, data=data)
 
+async def pergamum_renovacao_page(session):
+    renovacao_url = '/'.join([BIB_URL, 'pergamum/mobile/renovacao.php'])
+    return await session.get(renovacao_url)
+
 async def pergamum_renew(session, book):
     """Renews a book in the specified web session."""
     params = {'cod_acervo': book.cod_acervo, 'cod_exemplar': book.cod_exemplar}
@@ -157,9 +162,17 @@ async def main():
         completed = await asyncio.gather(*[pergamum_renew(session, book) 
                                            for book in renew_books],
                                          return_exceptions=True)
+
+        response = await pergamum_renovacao_page(session)
+        current_books = list(extract_books(await response.text()))
+
         for book, result in zip(renew_books, completed):
             if isinstance(result, Exception):
                 logging.error(f"Falhar ao renovar livro {book.name}: {str(result)}")
+                failed_books.append(book)
+            elif book in current_books:
+                logging.error(f"Falha ao renovar livro {book.name}: Estado do livro não foi alterado!")
+                Path(f"~/bibnew-{book.book_name}.html").write_text(await result.text())
                 failed_books.append(book)
             else:
                 renewed_books.append(book)
