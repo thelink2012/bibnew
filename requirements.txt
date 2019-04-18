@@ -1,0 +1,4 @@
+aiohttp~=3.5.4
+parsel~=1.5.1
+aiosmtplib~=1.0.4
+sentry-sdk~=0.7.10
