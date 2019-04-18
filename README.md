@@ -10,10 +10,13 @@ The bot will also send you emails whenever it renews a book, whether you are nea
 
 ## Usage
 
-First of all, install the bot dependencies using [Pipenv](https://docs.pipenv.org/):
+First of all, create a virtual environment and install the project dependencies:
 
-    $ pipenv install
-   
+    $ python3 -m venv .venv
+    $ . .venv/bin/activate
+    $ pip install -r requirements.txt
+    $ deactivate
+
 Then you need to set a few environment variables:
 
  + `BIB_PERGAMUM_LOGIN`: Your Pergamum Login.
@@ -27,7 +30,9 @@ And optionally, for email support:
 
 Then you may run the script, like this:
 
-    $ pipenv run python bibnew.py
+    $ . .venv/bin/activate
+    $ python3 bibnew.py
+    $ deactivate
 
 Ideally this should be run in a cron every day. It renews only when it really needs to, so it may be a NO-OP during a few days.
 
