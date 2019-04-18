@@ -48,6 +48,11 @@ logging.basicConfig(stream=sys.stderr, level=logging.INFO,
         format=('[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - '
                 f'{PERGAMUM_LOGIN} - %(message)s'))
 
+SENTRY_DSN = os.environ.get('SENTRY_DSN')
+if SENTRY_DSN is not None:
+    import sentry_sdk
+    sentry_sdk.init(SENTRY_DSN)
+
 BIB_URL = 'http://www.pergamum.bib.ufba.br'
 
 BIB_MAX_RENEW = 7

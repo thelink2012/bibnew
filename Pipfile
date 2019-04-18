@@ -10,6 +10,7 @@ name = "pypi"
 aiohttp = "*"
 parsel = "*"
 aiosmtplib = "*"
+sentry-sdk = "*"
 
 
 [dev-packages]
