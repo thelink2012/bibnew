@@ -177,8 +177,11 @@ async def main():
                 failed_books.append(book)
             elif book in current_books:
                 logging.error(f"Falha ao renovar livro {book.name}: Estado do livro não foi alterado!")
-                Path(f"~/bibnew-{book.book_name}.html").write_text(await result.text())
                 failed_books.append(book)
+                try:
+                    Path(f"/var/log/bibnew-{book.cod_acervo}-{book.cod_exemplar}.html").write_text(await result.text())
+                except:
+                    logger.exception("failed to save HTML dump")
             else:
                 renewed_books.append(book)
 
