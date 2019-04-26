@@ -179,7 +179,8 @@ async def main():
                 logging.error(f"Falha ao renovar livro {book.name}: Estado do livro não foi alterado!")
                 failed_books.append(book)
                 try:
-                    Path(f"/var/log/bibnew-{book.cod_acervo}-{book.cod_exemplar}.html").write_text(await result.text())
+                    logpath = f"~/bibnew-{book.cod_acervo}-{book.cod_exemplar}.html"
+                    Path(logpath).expanduser().write_text(await result.text())
                 except:
                     logger.exception("failed to save HTML dump")
             else:
